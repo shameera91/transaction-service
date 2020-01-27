@@ -19,4 +19,22 @@ public class FullTransaction {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "full_tran_id_generator")
     @Column(name = "FULL_TRANS_ID")
     private Long fullTransId;
+
+    private byte[] requestBuffer;
+
+    public Long getFullTransId() {
+        return fullTransId;
+    }
+
+    public void setFullTransId(Long fullTransId) {
+        this.fullTransId = fullTransId;
+    }
+
+    public byte[] getRequestBuffer() {
+        return requestBuffer;
+    }
+
+    public void setRequestBuffer(byte[] requestBuffer) {
+        this.requestBuffer = requestBuffer;
+    }
 }
