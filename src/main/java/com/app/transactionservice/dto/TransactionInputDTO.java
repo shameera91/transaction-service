@@ -1,137 +1,57 @@
-package com.app.transactionservice.modal;
+package com.app.transactionservice.dto;
 
-import org.hibernate.annotations.OptimisticLock;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import java.util.Date;
 
 /**
- * Created By Shameera.A on 1/25/2020
+ * Created By Shameera.A on 1/28/2020
  */
+public class TransactionInputDTO {
 
-@Entity
-public abstract class AbstractTransaction {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tran_id_generator")
-    @Column(name = "TRAN_ID")
-    private Long transactionId;
-
-    @Column(name = "PARENT_TRAN_ID")
     private Long parentTranId;
-
-    @Column(name = "SERVICE_NAME")
     private String serviceName = "";
-
-    @Column(name = "USER_NAME")
     private String userName = "";
-
-    @Column(name = "USER_PROFILE_NAME")
     private String userProfileName = "";
-
-    @Column(name = "SESSION_ID")
     private String sessionId;
-
-    @Column(name = "EXECUTION_TIME")
     private String executionTime;
-
-    @Column(name = "REQUEST_TIME")
     private Date requestTime;
 
-    @Column(name = "RESPONSE_TIME")
-    @OptimisticLock(excluded = true)
+
     private Date responseTime;
-
-    @Column(name = "RETRIEVAL_TIME")
     private Date retrievalTime;
-
-    @Column(name = "RETRIEVAL_EXPIRY_TIME")
     private Date retrievalExpiryTime;
-
-    @Column(name = "ASSUMED_FAILED_TIME")
     private Date assumedFailedTime;
-
-    @Column(name = "LAST_RESTART_TIME")
     private Date lastRestartTime;
-
-    @Column(name = "DELIVERY_DETAILS")
     private String deliveryDetails = "";
-
-    @Column(name = "PRESENTATION_STATUS")
     private String presentationStatus = "";
-
-    @Column(name = "STATUS")
     private String status = "";
-
-    @Column(name = "REQUEST_MSG_VERSION")
     private String requestMsgVersion = "";
-
-    @Column(name = "REQUEST_MSG_ID")
     private String requestMsgId = "";
-
-    @Column(name = "PROVIDER_REFERENCE")
     private String providerReference = "";
-
-    @Column(name = "PAYMENT_REFERENCE")
     private String paymentReference = "";
-
-    @Column(name = "CHILD_SEQ_NO")
     private Long childSeqNo;
-
-    @Column(name = "NEXT_RESTART_ATTEMPT")
     private Long nextRestartAttempt;
-
-    @Column(name = "NEXT_RESTART_DUE_TIME")
     private Date nextRestartDueTime;
-
-    @Column(name = "USER_ID")
     private String userId = "";
-
-    @Column(name = "RENDERED_RESULT")
     private String renderedResult = "No";
 
-    @Override
-    public String toString() {
-        return "Transaction{" +
-                "transactionId=" + transactionId +
-                ", parenTranId=" + parentTranId +
-                ", serviceName='" + serviceName + '\'' +
-                ", userName='" + userName + '\'' +
-                ", userProfileName='" + userProfileName + '\'' +
-                ", sessionId='" + sessionId + '\'' +
-                ", executionTime='" + executionTime + '\'' +
-                ", requestTime=" + requestTime +
-                ", responseTime=" + responseTime +
-                ", retrievalTime=" + retrievalTime +
-                ", retrievalExpiryTime=" + retrievalExpiryTime +
-                ", assumedFailedTime=" + assumedFailedTime +
-                ", lastRestartTime=" + lastRestartTime +
-                ", deliveryDetails='" + deliveryDetails + '\'' +
-                ", presentationStatus='" + presentationStatus + '\'' +
-                ", status='" + status + '\'' +
-                ", requestMsgVersion='" + requestMsgVersion + '\'' +
-                ", requestMsgId='" + requestMsgId + '\'' +
-                ", providerReference='" + providerReference + '\'' +
-                ", paymentReference='" + paymentReference + '\'' +
-                ", childSeqNo=" + childSeqNo +
-                ", nextRestartAttempt=" + nextRestartAttempt +
-                ", nextRestartDueTime=" + nextRestartDueTime +
-                ", userId='" + userId + '\'' +
-                ", renderedResult='" + renderedResult + '\'' +
-                '}';
+
+
+    public TransactionInputDTO() {
+
     }
 
-    public Long getTransactionId() {
-        return transactionId;
+    public TransactionInputDTO(Long parentTranId, String serviceName, String userName,
+                               String userProfileName, String sessionId, String executionTime, Date requestTime) {
+        this.parentTranId = parentTranId;
+        this.serviceName = serviceName;
+        this.userName = userName;
+        this.userProfileName = userProfileName;
+        this.sessionId = sessionId;
+        this.executionTime = executionTime;
+        this.requestTime = requestTime;
     }
 
-    public void setTransactionId(Long transactionId) {
-        this.transactionId = transactionId;
-    }
+
 
     public Long getParentTranId() {
         return parentTranId;
@@ -188,6 +108,10 @@ public abstract class AbstractTransaction {
     public void setRequestTime(Date requestTime) {
         this.requestTime = requestTime;
     }
+
+
+
+
 
     public Date getResponseTime() {
         return responseTime;

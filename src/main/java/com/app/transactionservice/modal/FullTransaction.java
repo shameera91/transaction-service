@@ -20,7 +20,11 @@ public class FullTransaction {
     @Column(name = "FULL_TRANS_ID")
     private Long fullTransId;
 
+    @Column(name = "REQUEST_BUFFER")
     private byte[] requestBuffer;
+
+    @Column(name = "PARENT_ID")
+    private Long parentId;
 
     public Long getFullTransId() {
         return fullTransId;
@@ -36,5 +40,13 @@ public class FullTransaction {
 
     public void setRequestBuffer(byte[] requestBuffer) {
         this.requestBuffer = requestBuffer;
+    }
+
+    public Long getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(Long parentId) {
+        this.parentId = parentId;
     }
 }
