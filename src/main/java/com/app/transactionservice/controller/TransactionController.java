@@ -1,11 +1,16 @@
 package com.app.transactionservice.controller;
 
 import com.app.transactionservice.dto.TransactionInputDTO;
+import com.app.transactionservice.modal.FullTransaction;
 import com.app.transactionservice.modal.Transaction;
+import com.app.transactionservice.service.FullTransactionService;
+import com.app.transactionservice.service.TransactionHistoryService;
 import com.app.transactionservice.service.TransactionService;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,19 +24,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("api/v1/transaction")
 public class TransactionController {
 
-    /*@Autowired
-    TransactionRepository transactionRepository;
-
-    @Autowired
-    FullTransactionRepository fullTransactionRepository;
-
-    @Autowired
-    ObjectMapper objectMapper;*/
-
     private final TransactionService transactionService;
+    private final TransactionHistoryService transactionHistoryService;
+    private final FullTransactionService fullTransactionService;
 
-    public TransactionController(TransactionService transactionService) {
+    public TransactionController(TransactionService transactionService,
+                                 TransactionHistoryService transactionHistoryService,
+                                 FullTransactionService fullTransactionService) {
         this.transactionService = transactionService;
+        this.transactionHistoryService = transactionHistoryService;
+        this.fullTransactionService = fullTransactionService;
     }
 
     @PostMapping(value = "/save")
@@ -39,40 +41,24 @@ public class TransactionController {
         return new ResponseEntity<>(this.transactionService.saveTransaction(transactionInputDTO), HttpStatus.CREATED);
     }
 
+    @PatchMapping(value = "/update")
+    public ResponseEntity<?> updateTransaction(@RequestBody TransactionInputDTO transactionInputDTO) {
+        this.transactionService.updateTransaction(transactionInputDTO);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Transaction> getTransaction(@PathVariable long id){
+    public ResponseEntity<Transaction> getTransaction(@PathVariable long id) {
         return ResponseEntity.ok(transactionService.getTransactionById(id));
     }
 
-   /* @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody
-    String getTransaction(@PathVariable long id) throws JsonProcessingException, NoResultException {
-        return objectMapper.writeValueAsString(transactionRepository.findById(id).orElseThrow(NoResultException::new));
+    @GetMapping
+    public ResponseEntity<?> getAllTransaction(Pageable pageable) {
+        return ResponseEntity.ok(transactionService.getAllTransactions(pageable));
     }
 
-    @GetMapping(value = "/{id}/full", produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody
-    String getFullTransaction(@PathVariable long id) throws JsonProcessingException, NoResultException {
-        return objectMapper.writeValueAsString(fullTransactionRepository.findById(id).orElseThrow(NoResultException::new));
+    @GetMapping(value = "/{id}/full")
+    public ResponseEntity<FullTransaction> getFullTransaction(@PathVariable long id) {
+        return ResponseEntity.ok(fullTransactionService.findFullTransactionById(id));
     }
-
-    @GetMapping(value = "/save/update", produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody String updateTransaction() throws JsonProcessingException, NoResultException {
-        byte[] randomBytes = new byte[30];       *//* this doesn't make sense to me   ( what is the thing you are going to update ?)*//*
-        new Random().nextBytes(randomBytes);
-        FullTransaction t = new FullTransaction();
-        t.setRequestBuffer(randomBytes);
-        return objectMapper.writeValueAsString(t);
-    }
-
-    @GetMapping(value = "/{id}/parent", produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody
-    String getParentTransaction(@PathVariable long id) throws JsonProcessingException, NoResultException {
-        return objectMapper.writeValueAsString(transactionRepository
-                .findById(id).map(t -> transactionRepository.findById(t.getParentTranId())).orElseThrow(NoResultException::new));
-    }*/
-
-
-
-
 }

@@ -31,14 +31,16 @@ class TransactionServiceApplicationTests {
 
 
     private static final Long PARENT_TRAN_ID = 345l;
+    private static final Long PARENT_TRAN_ID_TWO = 346l;
     private static final String SERVICE_NAME = "service name";
     private static final String USER_NAME = "user one";
     private static final String USER_PROFILE_NAME = "profile one";
     private static final String SESSION_ID = "S00445";
     private static final String EXECUTION_TIME = "334";
     private static final Date REQUEST_TIME = new Date();
-
+    private static final Long TRANSACTION_ID = 1l;
     TransactionInputDTO transactionInput;
+    TransactionInputDTO transactionInputTwo;
     @LocalServerPort
     private int port;
 
@@ -52,7 +54,8 @@ class TransactionServiceApplicationTests {
 
         transactionInput = new TransactionInputDTO(PARENT_TRAN_ID, SERVICE_NAME, USER_NAME, USER_PROFILE_NAME,
                 SESSION_ID, EXECUTION_TIME, REQUEST_TIME);
-
+        transactionInputTwo = new TransactionInputDTO(PARENT_TRAN_ID_TWO, SERVICE_NAME, USER_NAME, USER_PROFILE_NAME,
+                SESSION_ID, EXECUTION_TIME, REQUEST_TIME);
     }
 
     @AfterEach
@@ -99,5 +102,33 @@ class TransactionServiceApplicationTests {
                 .get(TRANSACTION_BY_ID_RESOURCE).then().statusCode(HttpStatus.SC_NOT_FOUND);
     }
 
+    @Test
+    public void testGetAllTransactionsWithWithDefaultPageParams(){
+        RestAssured.given().contentType(ContentType.JSON).body(transactionInput).post(TRANSACTION_RESOURCE + "/save")
+                .then().statusCode(HttpStatus.SC_CREATED).body("transactionId", notNullValue())
+                .body("parentTranId", equalTo(PARENT_TRAN_ID.intValue())).body("serviceName", equalTo(SERVICE_NAME))
+                .body("userName", equalTo(USER_NAME)).body("userProfileName", equalTo(USER_PROFILE_NAME))
+                .body("sessionId", equalTo(SESSION_ID));
+        RestAssured.given().contentType(ContentType.JSON).body(transactionInputTwo).post(TRANSACTION_RESOURCE + "/save")
+                .then().statusCode(HttpStatus.SC_CREATED).body("transactionId", notNullValue())
+                .body("parentTranId", equalTo(PARENT_TRAN_ID_TWO.intValue())).body("serviceName", equalTo(SERVICE_NAME))
+                .body("userName", equalTo(USER_NAME)).body("userProfileName", equalTo(USER_PROFILE_NAME))
+                .body("sessionId", equalTo(SESSION_ID));
+
+        RestAssured.given().contentType(ContentType.JSON).get(TRANSACTION_RESOURCE).then()
+                .statusCode(HttpStatus.SC_OK).body("content.size()", equalTo(2))
+                .body("content[0].transactionId", equalTo(TRANSACTION_ID.intValue()))
+                .body("content[0].parentTranId", equalTo(PARENT_TRAN_ID.intValue()))
+                .body("content[0].serviceName", equalTo(SERVICE_NAME)).body("content[0].userName", equalTo(USER_NAME))
+                .body("content[0].userProfileName", equalTo(USER_PROFILE_NAME)).body("content[0].sessionId", equalTo(SESSION_ID))
+
+                .body("pageable.offset", equalTo(0)).body("pageable.pageSize", equalTo(20))
+                .body("pageable.pageNumber", equalTo(0)).body("pageable.paged", equalTo(true))
+                .body("pageable.unpaged", equalTo(false)).body("pageable.sort.unsorted", equalTo(true))
+                .body("pageable.sort.sorted", equalTo(false)).body("pageable.sort.empty", equalTo(true))
+                .body("totalElements", equalTo(2)).body("last", equalTo(true)).body("totalPages", equalTo(1))
+                .body("number", equalTo(0)).body("size", equalTo(20)).body("sort.unsorted", equalTo(true))
+                .body("sort.sorted", equalTo(false)).body("sort.empty", equalTo(true));
+    }
 
 }

@@ -7,6 +7,7 @@ import java.util.Date;
  */
 public class TransactionInputDTO {
 
+    private Long id;
     private Long parentTranId;
     private String serviceName = "";
     private String userName = "";
@@ -40,6 +41,18 @@ public class TransactionInputDTO {
 
     }
 
+    public TransactionInputDTO(Long id, Long parentTranId, String serviceName, String userName,
+                               String userProfileName, String sessionId, String executionTime, Date requestTime) {
+        this.id = id;
+        this.parentTranId = parentTranId;
+        this.serviceName = serviceName;
+        this.userName = userName;
+        this.userProfileName = userProfileName;
+        this.sessionId = sessionId;
+        this.executionTime = executionTime;
+        this.requestTime = requestTime;
+    }
+
     public TransactionInputDTO(Long parentTranId, String serviceName, String userName,
                                String userProfileName, String sessionId, String executionTime, Date requestTime) {
         this.parentTranId = parentTranId;
@@ -51,7 +64,13 @@ public class TransactionInputDTO {
         this.requestTime = requestTime;
     }
 
+    public Long getId() {
+        return id;
+    }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public Long getParentTranId() {
         return parentTranId;
