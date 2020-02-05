@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 /**
  * Created By Shameera.A on 1/25/2020
@@ -23,6 +24,11 @@ public class TransactionServiceImpl implements TransactionService {
 
     public TransactionServiceImpl(TransactionRepository transactionRepository) {
         this.transactionRepository = transactionRepository;
+    }
+
+    @Override
+    public Transaction saveTransactionWithTransactionObject(Transaction transaction) {
+        return transactionRepository.save(transaction);
     }
 
     @Override
@@ -65,5 +71,10 @@ public class TransactionServiceImpl implements TransactionService {
     public Page<Transaction> getAllTransactions(Pageable pageable) {
         Page<Transaction> allTransactions = transactionRepository.findAll(pageable);
         return new PageImpl<>(allTransactions.getContent(), pageable, allTransactions.getTotalElements());
+    }
+
+    @Override
+    public List<Transaction> getAllTransactions() {
+        return transactionRepository.findAll();
     }
 }
