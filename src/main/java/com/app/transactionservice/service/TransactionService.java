@@ -22,4 +22,6 @@ public interface TransactionService {
     Page<Transaction> getAllTransactions(Pageable pageable);
 
     List<Transaction> getAllTransactions();
+
+    void deleteById(long id);
 }

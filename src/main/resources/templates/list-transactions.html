@@ -19,7 +19,7 @@
                     <a class="btn btn-primary" href="/edit">
                         <i class="fas fa-user-plus ml-2"> Add Transaction </i></a>
                 </p>
-                <div class="col-md-10">
+                <div>
                     <h2 th:case="null">No record found !!</h2>
                     <div th:case="*">
                         <table class="table table-striped table-responsive-md">
@@ -30,6 +30,8 @@
                                 <th>User Name</th>
                                 <th>User Profile Name</th>
                                 <th>Session ID</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -37,13 +39,24 @@
                                 <td th:text="${transaction.parentTranId}"></td>
                                 <td th:text="${transaction.serviceName}"></td>
                                 <td th:text="${transaction.userName}"></td>
-                                <td></td>
-                                <td></td>
+                                <td th:text="${transaction.userProfileName}"></td>
+                                <td th:text="${transaction.sessionId}"></td>
+                                <td>
+                                    <a th:href="@{/edit/{id}(id=${transaction.transactionId})}"
+                                       class="btn btn-primary">
+                                        <i class="fas fa-user-edit ml-2"></i>
+                                    </a>
+                                </td>
+                                <td>
+                                    <a th:href="@{/delete/{id}(id=${transaction.transactionId})}"
+                                       class="btn btn-primary">
+                                        <i class="fas fa-user-times ml-2"></i>
+                                    </a>
+                                </td>
                             </tr>
                             </tbody>
                         </table>
                     </div>
-
                 </div>
             </div>
         </div>

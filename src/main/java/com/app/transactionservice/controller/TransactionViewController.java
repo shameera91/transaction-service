@@ -57,31 +57,27 @@ public class TransactionViewController {
         return "add-edit-transaction";
     }
 
-    @PostMapping(value = "/save")
+    @PostMapping(path = "/save")
     public String saveTransaction(Transaction transaction) {
         transactionService.saveTransactionWithTransactionObject(transaction);
         return "redirect:/";
     }
 
-    @RequestMapping("/add-new")
+    @RequestMapping(path = "/delete/{id}")
+    public String deleteEmployeeById(Model model, @PathVariable("id") Long id){
+        transactionService.deleteById(id);
+        return "redirect:/";
+    }
+
+    /*@RequestMapping(path = "/add-new")
     public String showNewProductPage(Model model) {
         Transaction transaction = new Transaction();
         model.addAttribute("transaction", transaction);
         return "add-edit-transaction";
     }
+*/
 
 
-
-    @PatchMapping(value = "/update")
-    public ResponseEntity<?> updateTransaction(@RequestBody TransactionInputDTO transactionInputDTO) {
-        this.transactionService.updateTransaction(transactionInputDTO);
-        return ResponseEntity.ok(HttpStatus.OK);
-    }
-
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<Transaction> getTransaction(@PathVariable long id) {
-        return ResponseEntity.ok(transactionService.getTransactionById(id));
-    }
 
 
 
