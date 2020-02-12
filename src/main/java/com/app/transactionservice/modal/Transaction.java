@@ -1,5 +1,8 @@
 package com.app.transactionservice.modal;
 
+import com.app.transactionservice.dto.TransactionOutputDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
@@ -17,5 +20,11 @@ import java.io.Serializable;
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Transaction extends AbstractTransaction implements Serializable {
 
+
+    @JsonIgnore
+    public TransactionOutputDTO viewAsDTO() {
+        return new TransactionOutputDTO(getTransactionId(), getParentTranId(), getServiceName(), getUserName(),
+                getUserProfileName(), getSessionId(), getExecutionTime(), getRequestTime());
+    }
 
 }

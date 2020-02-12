@@ -1,6 +1,7 @@
 package com.app.transactionservice.service.impl;
 
 import com.app.transactionservice.dto.TransactionInputDTO;
+import com.app.transactionservice.dto.TransactionOutputDTO;
 import com.app.transactionservice.exceptions.ResourceNotFoundException;
 import com.app.transactionservice.modal.Transaction;
 import com.app.transactionservice.repository.TransactionRepository;
@@ -26,7 +27,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public Transaction saveTransaction(TransactionInputDTO input) {
+    public TransactionOutputDTO saveTransaction(TransactionInputDTO input) {
 
         /* currently setting few parameters only*/
         Transaction transaction = new Transaction();
@@ -38,8 +39,9 @@ public class TransactionServiceImpl implements TransactionService {
         transaction.setExecutionTime(input.getExecutionTime());
         transaction.setRequestTime(input.getRequestTime());
 
+        Transaction save = transactionRepository.save(transaction);
 
-        return transactionRepository.save(transaction);
+        return save.viewAsDTO();
     }
 
     @Transactional

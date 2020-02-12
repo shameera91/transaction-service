@@ -1,10 +1,5 @@
 package com.app.transactionservice;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import com.app.transactionservice.dto.TransactionInputDTO;
 import com.app.transactionservice.repository.TransactionRepository;
 import com.jayway.restassured.RestAssured;
@@ -22,12 +17,15 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Date;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.notNullValue;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class TransactionServiceApplicationTests {
 
-    private static final String TRANSACTION_RESOURCE = "api/v1/transaction";
-    private static final String TRANSACTION_BY_ID_RESOURCE = "api/v1/transaction/{id}";
+    private static final String TRANSACTION_RESOURCE = "/api/v1/transaction";
+    private static final String TRANSACTION_BY_ID_RESOURCE = "/api/v1/transaction/{id}";
 
 
     private static final Long PARENT_TRAN_ID = 345l;

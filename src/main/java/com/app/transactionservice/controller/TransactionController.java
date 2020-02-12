@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
  * Created By Shameera.A on 1/25/2020
  */
 @RestController
-@RequestMapping("api/v1/transaction")
+@RequestMapping("/api/v1/transaction")
 public class TransactionController {
 
     private final TransactionService transactionService;

@@ -1,6 +1,7 @@
 package com.app.transactionservice.service;
 
 import com.app.transactionservice.dto.TransactionInputDTO;
+import com.app.transactionservice.dto.TransactionOutputDTO;
 import com.app.transactionservice.modal.Transaction;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,7 +11,7 @@ import org.springframework.data.domain.Pageable;
  */
 public interface TransactionService {
 
-    Transaction saveTransaction(TransactionInputDTO transactionInputDTO);
+    TransactionOutputDTO saveTransaction(TransactionInputDTO transactionInputDTO);
 
     void updateTransaction(TransactionInputDTO transactionInputDTO);
 
