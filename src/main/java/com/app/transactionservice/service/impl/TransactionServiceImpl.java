@@ -2,14 +2,18 @@ package com.app.transactionservice.service.impl;
 
 import com.app.transactionservice.dto.TransactionInputDTO;
 import com.app.transactionservice.dto.TransactionOutputDTO;
+import com.app.transactionservice.exceptions.DataException;
 import com.app.transactionservice.exceptions.ResourceNotFoundException;
 import com.app.transactionservice.modal.Transaction;
 import com.app.transactionservice.repository.TransactionRepository;
 import com.app.transactionservice.service.TransactionService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.transaction.Transactional;
 
@@ -20,6 +24,10 @@ import javax.transaction.Transactional;
 @Service
 public class TransactionServiceImpl implements TransactionService {
 
+    /** The application resource bundles */
+    @Autowired
+    private MessageSource messageSource;
+
     private final TransactionRepository transactionRepository;
 
     public TransactionServiceImpl(TransactionRepository transactionRepository) {
@@ -28,6 +36,8 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public TransactionOutputDTO saveTransaction(TransactionInputDTO input) {
+
+        validateParameters(input);
 
         /* currently setting few parameters only*/
         Transaction transaction = new Transaction();
@@ -42,6 +52,46 @@ public class TransactionServiceImpl implements TransactionService {
         Transaction save = transactionRepository.save(transaction);
 
         return save.viewAsDTO();
+    }
+
+    private void validateParameters(TransactionInputDTO dto) throws DataException {
+
+        String sessionId;
+        String mode;
+        String accountCode;
+        String serviceName;
+        long parentTranId = 0;
+        long childSeqNo = 0;
+
+        // get all the fields from the dto
+        sessionId = dto.getSessionId();
+
+        /*mode = dto.getMode();*/    /* these fields are not in our transaction entity*/
+       /* accountCode = dto.getAccountDomain().getAccountCode();*/
+        /*serviceName = dto.getTransactionDomain().getServiceName();*/
+
+        // may have a parent
+        if (dto.getParentTranId() != null) {
+            parentTranId = dto.getParentTranId();
+
+            // if has a parent then must have a childSequenceNumber
+            childSeqNo = dto.getChildSeqNo().longValue();
+        }
+
+        // don't want to proceed if mandatory fields are not set
+        /*if (!StringUtils.hasText(sessionId) || !StringUtils.hasText(accountCode) || !StringUtils.hasText(mode)
+                || !StringUtils.hasText(serviceName)) {*/
+        if (!StringUtils.hasText(sessionId)) {
+
+            throw new DataException(getMessage("error.newtran.data.format", new Object[] {  sessionId }), dto);
+        }
+
+        // don't want to proceed if other fields are null or invalid
+        if ((parentTranId < 0) || (childSeqNo < 0)) {
+
+            throw new DataException(getMessage("error.dto.initialization", new Object[] { this.getClass().getName() }),
+                    "error.dto.initialization", dto);
+        }
     }
 
     @Transactional
@@ -67,5 +117,9 @@ public class TransactionServiceImpl implements TransactionService {
     public Page<Transaction> getAllTransactions(Pageable pageable) {
         Page<Transaction> allTransactions = transactionRepository.findAll(pageable);
         return new PageImpl<>(allTransactions.getContent(), pageable, allTransactions.getTotalElements());
+    }
+
+    protected String getMessage(String code, Object[] args) {
+        return messageSource.getMessage(code, args, null);
     }
 }

@@ -16,7 +16,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "C2_TRANSACTION")
-@SequenceGenerator(name = "trans_id_generator", allocationSize = 1, sequenceName = "C2_TRAN_ID_SEQ")
+@SequenceGenerator(name = "tran_id_generator", allocationSize = 1, sequenceName = "C2_TRAN_ID_SEQ")
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Transaction extends AbstractTransaction implements Serializable {
 
