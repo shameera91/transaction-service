@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 /**
  * Created By Shameera.A on 1/25/2020
  */
@@ -37,7 +39,7 @@ public class TransactionController {
     }
 
     @PostMapping(value = "/save")
-    public ResponseEntity<?> saveTransaction(@RequestBody TransactionInputDTO transactionInputDTO) {
+    public ResponseEntity<?> saveTransaction(@Valid @RequestBody TransactionInputDTO transactionInputDTO) {
         return new ResponseEntity<>(this.transactionService.saveTransaction(transactionInputDTO), HttpStatus.CREATED);
     }
 

@@ -37,6 +37,10 @@ class TransactionServiceApplicationTests {
     private static final String EXECUTION_TIME = "334";
     private static final Date REQUEST_TIME = new Date();
     private static final Long TRANSACTION_ID = 1l;
+    private static final String ACCOUNT_CODE = "code1";
+    private static final String MODE = "ONLINE";
+
+
     TransactionInputDTO transactionInput;
     TransactionInputDTO transactionInputTwo;
     @LocalServerPort
@@ -51,15 +55,17 @@ class TransactionServiceApplicationTests {
         RestAssured.port = port;
 
         transactionInput = new TransactionInputDTO(PARENT_TRAN_ID, SERVICE_NAME, USER_NAME, USER_PROFILE_NAME,
-                SESSION_ID, EXECUTION_TIME, REQUEST_TIME);
+                SESSION_ID, EXECUTION_TIME, REQUEST_TIME,ACCOUNT_CODE,MODE);
         transactionInputTwo = new TransactionInputDTO(PARENT_TRAN_ID_TWO, SERVICE_NAME, USER_NAME, USER_PROFILE_NAME,
-                SESSION_ID, EXECUTION_TIME, REQUEST_TIME);
+                SESSION_ID, EXECUTION_TIME, REQUEST_TIME,ACCOUNT_CODE,MODE);
     }
 
     @AfterEach
     public void cleanUp() {
         this.transactionRepository.deleteAll();
     }
+
+
 
     @Test
     public void testSaveTransaction() {
@@ -68,6 +74,24 @@ class TransactionServiceApplicationTests {
                 .body("parentTranId", equalTo(PARENT_TRAN_ID.intValue())).body("serviceName", equalTo(SERVICE_NAME))
                 .body("userName", equalTo(USER_NAME)).body("userProfileName", equalTo(USER_PROFILE_NAME))
                 .body("sessionId", equalTo(SESSION_ID));
+    }
+
+    @Test
+    public void testSaveTransactionWithEmptyServiceName() {
+        TransactionInputDTO transactionInput = new TransactionInputDTO(PARENT_TRAN_ID, SERVICE_NAME, USER_NAME, USER_PROFILE_NAME,
+                "", EXECUTION_TIME, REQUEST_TIME,ACCOUNT_CODE,MODE);
+        RestAssured.given().contentType(ContentType.JSON).body(transactionInput).post(TRANSACTION_RESOURCE + "/save")
+                .then().statusCode(HttpStatus.SC_BAD_REQUEST);
+    }
+
+
+
+    @Test
+    public void testSaveTransactionWithEmptySessionId() {
+        TransactionInputDTO transactionInput = new TransactionInputDTO(PARENT_TRAN_ID, "", USER_NAME, USER_PROFILE_NAME,
+                SESSION_ID, EXECUTION_TIME, REQUEST_TIME,ACCOUNT_CODE,MODE);
+        RestAssured.given().contentType(ContentType.JSON).body(transactionInput).post(TRANSACTION_RESOURCE + "/save")
+                .then().statusCode(HttpStatus.SC_BAD_REQUEST);
     }
 
     @Test

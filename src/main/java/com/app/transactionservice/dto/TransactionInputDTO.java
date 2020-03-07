@@ -1,5 +1,7 @@
 package com.app.transactionservice.dto;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
@@ -8,10 +10,17 @@ import java.util.Date;
 public class TransactionInputDTO {
 
     private Long id;
+
     private Long parentTranId;
+
+    @NotNull
+    @NotEmpty
     private String serviceName = "";
     private String userName = "";
     private String userProfileName = "";
+
+    @NotNull
+    @NotEmpty
     private String sessionId;
     private String executionTime;
     private Date requestTime;
@@ -35,6 +44,13 @@ public class TransactionInputDTO {
     private String userId = "";
     private String renderedResult = "No";
 
+    @NotNull
+    @NotEmpty
+    private String accountCode;
+
+    @NotNull
+    @NotEmpty
+    private String mode;
 
 
     public TransactionInputDTO() {
@@ -42,7 +58,8 @@ public class TransactionInputDTO {
     }
 
     public TransactionInputDTO(Long id, Long parentTranId, String serviceName, String userName,
-                               String userProfileName, String sessionId, String executionTime, Date requestTime) {
+                               String userProfileName, String sessionId, String executionTime, Date requestTime,
+                               String accountCode, String mode) {
         this.id = id;
         this.parentTranId = parentTranId;
         this.serviceName = serviceName;
@@ -51,10 +68,13 @@ public class TransactionInputDTO {
         this.sessionId = sessionId;
         this.executionTime = executionTime;
         this.requestTime = requestTime;
+        this.accountCode = accountCode;
+        this.mode = mode;
     }
 
     public TransactionInputDTO(Long parentTranId, String serviceName, String userName,
-                               String userProfileName, String sessionId, String executionTime, Date requestTime) {
+                               String userProfileName, String sessionId, String executionTime, Date requestTime,
+                               String accountCode, String mode) {
         this.parentTranId = parentTranId;
         this.serviceName = serviceName;
         this.userName = userName;
@@ -62,6 +82,9 @@ public class TransactionInputDTO {
         this.sessionId = sessionId;
         this.executionTime = executionTime;
         this.requestTime = requestTime;
+
+        this.accountCode = accountCode;
+        this.mode = mode;
     }
 
     public Long getId() {
@@ -129,8 +152,21 @@ public class TransactionInputDTO {
     }
 
 
+    public String getAccountCode() {
+        return accountCode;
+    }
 
+    public void setAccountCode(String accountCode) {
+        this.accountCode = accountCode;
+    }
 
+    public String getMode() {
+        return mode;
+    }
+
+    public void setMode(String mode) {
+        this.mode = mode;
+    }
 
     public Date getResponseTime() {
         return responseTime;

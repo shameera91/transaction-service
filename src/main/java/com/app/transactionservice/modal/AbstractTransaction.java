@@ -94,6 +94,13 @@ public abstract class AbstractTransaction {
     @Column(name = "RENDERED_RESULT")
     private String renderedResult = "No";
 
+    /*newly added fields*/  /* these are form some other entities like AccountDomain */
+    @Column(name = "ACCOUNT_CODE")
+    private String accountCode;
+
+    @Column(name = "MODE")  /* property form TransferObject dto */
+    private String mode;
+
     @Override
     public String toString() {
         return "Transaction{" +
@@ -121,6 +128,8 @@ public abstract class AbstractTransaction {
                 ", nextRestartAttempt=" + nextRestartAttempt +
                 ", nextRestartDueTime=" + nextRestartDueTime +
                 ", userId='" + userId + '\'' +
+                ", accountCode='" + accountCode + '\'' +
+                ", mode='" + mode + '\'' +
                 ", renderedResult='" + renderedResult + '\'' +
                 '}';
     }
@@ -323,5 +332,21 @@ public abstract class AbstractTransaction {
 
     public void setRenderedResult(String renderedResult) {
         this.renderedResult = renderedResult;
+    }
+
+    public String getAccountCode() {
+        return accountCode;
+    }
+
+    public void setAccountCode(String accountCode) {
+        this.accountCode = accountCode;
+    }
+
+    public String getMode() {
+        return mode;
+    }
+
+    public void setMode(String mode) {
+        this.mode = mode;
     }
 }

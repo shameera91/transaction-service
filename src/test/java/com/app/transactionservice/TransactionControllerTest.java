@@ -111,13 +111,11 @@ public class TransactionControllerTest {
     }
 
     private TransactionInputDTO buildDto() {
-        return new TransactionInputDTO(345l, "service name", "user one",
-                "profile one", "S00445", "334", new Date());
+        return new TransactionInputDTO(345l, "service name", "user one", "profile one", "S00445", "334", new Date(), "code1", "ONLINE");
     }
 
     private TransactionInputDTO buildDtoTransactionTwo() {
-        return new TransactionInputDTO(112l, "service name2", "user two",
-                "profile two", "S00122", "100", new Date());
+        return new TransactionInputDTO(112l, "service name2", "user two", "profile two", "S00122", "100", new Date(), "code1", "ONLINE");
     }
 
 
