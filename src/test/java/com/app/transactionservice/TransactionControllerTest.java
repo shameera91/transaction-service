@@ -2,7 +2,6 @@ package com.app.transactionservice;
 
 import com.app.transactionservice.dto.TransactionInputDTO;
 import com.app.transactionservice.dto.TransactionOutputDTO;
-import com.app.transactionservice.modal.Transaction;
 import com.app.transactionservice.repository.TransactionRepository;
 import com.app.transactionservice.service.TransactionService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,7 +20,6 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.util.Date;
 
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -66,7 +64,8 @@ public class TransactionControllerTest {
     @Test
     void aj_testGetTransactionById() throws Exception {
         TransactionOutputDTO transactionOutputDTO = this.transactionService.saveTransaction(buildDto());
-        this.mockMvc.perform(get("/api/v1/transaction/1")).andExpect(status().isOk())
+        Long id = transactionOutputDTO.getId();
+        this.mockMvc.perform(get("/api/v1/transaction/" + id)).andExpect(status().isOk())
                 .andExpect(jsonPath("$.transactionId").value(transactionOutputDTO.getId()))
                 .andExpect(jsonPath("$.parentTranId").value(transactionOutputDTO.getParentTranId()))
                 .andExpect(jsonPath("$.serviceName").value(transactionOutputDTO.getServiceName()))
@@ -110,13 +109,38 @@ public class TransactionControllerTest {
 
     }
 
+    @Test
+    public void aj_testSaveTransactionWithEmptyServiceName() throws Exception {
+        this.mockMvc.perform(post("/api/v1/transaction/save").contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(buildDtoWithEmptyServiceName()))).andExpect(status().isBadRequest());
+    }
+
+
+    @Test
+    public void testSaveTransactionWithEmptySessionId() throws Exception {
+
+        this.mockMvc.perform(post("/api/v1/transaction/save").contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(buildDtoWithEmptySessionId()))).andExpect(status().isBadRequest());
+    }
+
     private TransactionInputDTO buildDto() {
-        return new TransactionInputDTO(345l, "service name", "user one", "profile one", "S00445", "334", new Date(), "code1", "ONLINE");
+        return new TransactionInputDTO(345l, "service name", "user one",
+                "profile one", "S00445", "334", new Date(), "code1", "ONLINE");
     }
 
     private TransactionInputDTO buildDtoTransactionTwo() {
-        return new TransactionInputDTO(112l, "service name2", "user two", "profile two", "S00122", "100", new Date(), "code1", "ONLINE");
+        return new TransactionInputDTO(112l, "service name2", "user two",
+                "profile two", "S00122", "100", new Date(), "code1", "ONLINE");
     }
 
+    private TransactionInputDTO buildDtoWithEmptyServiceName() {
+        return new TransactionInputDTO(345l, "", "user one",
+                "profile one", "S00445", "334", new Date(), "code1", "ONLINE");
+    }
+
+    private TransactionInputDTO buildDtoWithEmptySessionId() {
+        return new TransactionInputDTO(345l, "", "user one",
+                "profile one", "S00445", "334", new Date(), "code1", "ONLINE");
+    }
 
 }
