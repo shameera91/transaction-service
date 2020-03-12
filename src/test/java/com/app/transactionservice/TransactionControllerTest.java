@@ -123,6 +123,13 @@ public class TransactionControllerTest {
                 .content(new ObjectMapper().writeValueAsString(buildDtoWithEmptySessionId()))).andExpect(status().isBadRequest());
     }
 
+    @Test
+    public void testSaveTransactionWithInvalidServiceNameLength() throws Exception {
+
+        this.mockMvc.perform(post("/api/v1/transaction/save").contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(buildDtoWithInvalidServiceNameLength()))).andExpect(status().isBadRequest());
+    }
+
     private TransactionInputDTO buildDto() {
         return new TransactionInputDTO(345l, "service name", "user one",
                 "profile one", "S00445", "334", new Date(), "code1", "ONLINE");
@@ -140,6 +147,11 @@ public class TransactionControllerTest {
 
     private TransactionInputDTO buildDtoWithEmptySessionId() {
         return new TransactionInputDTO(345l, "", "user one",
+                "profile one", "S00445", "334", new Date(), "code1", "ONLINE");
+    }
+
+    private TransactionInputDTO buildDtoWithInvalidServiceNameLength() {
+        return new TransactionInputDTO(345l, "SER", "user one",
                 "profile one", "S00445", "334", new Date(), "code1", "ONLINE");
     }
 

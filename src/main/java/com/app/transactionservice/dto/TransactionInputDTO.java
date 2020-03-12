@@ -2,6 +2,7 @@ package com.app.transactionservice.dto;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 /**
@@ -15,12 +16,16 @@ public class TransactionInputDTO {
 
     @NotNull
     @NotEmpty
+    @Size(min = 5, max = 20)
     private String serviceName = "";
+    @Size(min = 5, max = 20)
     private String userName = "";
+    @Size(min = 5, max = 20)
     private String userProfileName = "";
 
     @NotNull
     @NotEmpty
+    @Size(min = 5, max = 20)
     private String sessionId;
     private String executionTime;
     private Date requestTime;
